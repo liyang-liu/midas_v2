@@ -2,28 +2,28 @@
 
 <!-- TOC -->
 
-- [Midas Description](#midasDescription)
-- [Model Structure](#Model Structure)
+- [Midas Description](#midas-description)
+- [Model Structure](#model-structure)
 - [Dataset](#Dataset)
 - [Features](#Features)
-    - [Mixed Precision](#Mixed Precision)
-- [System Requirements](#System Requirements)
-- [Quick Start](#Quick Start)
+    - [Mixed Precision](#mixed-precision)
+- [System Requirements](#system-requirements)
+- [Quick Start](#quick-start)
 - [Scripts](#Scripts)
-    - [Scripts and Example Code](#Scripts and Example Code)
-    - [Scripts Parameters](#Scripts Parameters)
-    - [Training Process](#Training Process)
-    - [Validation Prcoess](#Validation Process)
-- [Inference Process](#Inference Process)
-- [Model Description](#Model Description)
+    - [Scripts and Example Code](#scripts-and-example-code)
+    - [Scripts Parameters](#scripts-parameters)
+    - [Training Process](#training-process)
+    - [Validation Prcoess](#validation-process)
+- [Inference Process](#inference-process)
+- [Model Description](#model-description)
     - [Features](#Features)
-        - [Feature Evaluation](#Feature Evaluation)
-- [Explanation on Stochastic Situation](#Explanation on Stochastic Situation)
-- [ModelZoo HomePage](#ModelZoo HomePage)
+        - [Feature Evaluation](#feature-evaluation)
+- [Explanation on Stochastic Situation](#explanation-on-stochastic-situation)
+- [ModelZoo HomePage](#modelZoo-homePage)
 
 <!-- /TOC -->
 
-# midasDescription
+# Midas Description
 
 ## Summary
 
@@ -61,6 +61,13 @@ Dataset used：[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>)
 
 ## Mixed Precision
 
+Adopts [MixedPrecision_English](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html) training method,
+by using Full Purity (FP32) and Half Purity (FP16) to significantly improve Deep Learning efficiency and memory usage,
+yet achieving sufficient accuracy. 
+This results in training of even larger models or larger batch size in dedicated hardware. 
+The user is recommended to checkout out the "INFO" diary, and search for "reduce precision" for calculations 
+that use reduced purity.
+
 采用[混合精度](https://www.mindspore.cn/tutorials/experts/zh-CN/master/others/mixed_precision.html)的训练方法
 5使用支持单精度和半精度数据来提高深度学习神经网络的训练速度，同时保持单精度训练所能达到的网络精度。
 混合精度训练提高计算速度、减少内存使用的同时，支持在特定硬件上训练更大的模型
@@ -68,18 +75,11 @@ Dataset used：[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>)
 以FP16算子为例，如果输入数据类型为FP32，MindSpore后台会自动降低精度来处理数据。
 用户可打开INFO日志，搜索“reduce precision”查看精度降低的算子。
 
-Adopts [MixedPrecision_English](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html) training method,
-by using Full Purity (FP32) and Half Purity (FP16) to significantly improve Deep Learning efficiency and memory usage,
-yet achieving sufficient accuracy. 
-This results in training of even larger models or larger batch size in dedicated hardware. 
-The user is recommended to checkout out the "INFO" diary, and search for "reduce precision" for calculations 
-that use reduced purity.
  
 # System Requirements 
 
-- Hardware(Ascend or GPU)
-    - Prepare Ascend Processing unit to setup hardware environment. 准备Ascend处理器搭建硬件环境.
-    - Or Prepare GPU environment
+- Hardware(GPU)
+    - Prepare GPU environment
       - Install CUDA 11.6.0, cudnn 8.4.1.50, TensorRT 8.4.2.4(optional), then set following
       $ export PATH=/usr/local/cuda-11.6/bin:$PATH
       $ export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64:$LD_LIBRARY_PATH
@@ -91,14 +91,16 @@ that use reduced purity.
       $ pip install h5py
       $ pip install pip install opencv-python==4.9.0.80
       
-      - Install Mindspore: if cuda was configured correctly, should automatically download mindspore with GPU support)
-      $ pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
-      - Verify 
-      $ python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
       
       
 - Installation
-    - [MindSpore](https://www.mindspore.cn/install/en)
+    - Install Mindspore: if cuda was configured correctly, should automatically download mindspore with GPU support)
+      $ pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
+    - Verify 
+      $ python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
+	
+    - For details, see [MindSpore](https://www.mindspore.cn/install/en)
+    
 - If detailed information is needed, please check following resources 如需查看详情，请参见如下资源：
     - [MindSpore教程](https://www.mindspore.cn/tutorials/zh-CN/master/index.html)
     - [MindSpore Python API](https://www.mindspore.cn/docs/zh-CN/master/index.html)
@@ -123,6 +125,7 @@ After installing MindSpore from its official website, follow steps below for tra
   For the TUM dataset: run the pre-processing function to generate associate.txt for data pairing。
   All pre-processing functions can be found in the "preprocess" folder，
   for details please checkout the "readme.md" document under the "preprocess" folder。
+
  midas网络模型使用ReDWeb数据集用于训练,使用Sintel,KITTI,TUM数据集进行推理,数据集可通过[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>),[Sintel](http://sintel.is.tue.mpg.de),[Kitti](http://www.cvlibs.net/datasets/kitti/raw_data.php),[TUM](https://vision.in.tum.de/data/datasets/rgbd-dataset/download#freiburg2_desk_with_person)官方网站下载使用.
  Sintel数据集需要分别下载原图和深度图，放入到Sintel数据集文件夹中。TUM数据集根据处理函数得到associate.txt进行匹配数据。所有处理函数在preprocess文件夹下，具体可参考preprocess文件夹下的readme.md。
   
@@ -184,7 +187,7 @@ Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
 # Scripts
 
 ## Scripts and Example Code
-310 refers to a Ascend computing unit model [310](https://www.mindspore.cn/docs/programming_guide/en/r1.3/multi_platform_inference_ascend_310.html)
+310 refers to a Ascent computing unit processor developed from Huawei [310](https://www.mindspore.cn/docs/programming_guide/en/r1.3/multi_platform_inference_ascend_310.html), we will NOT use it in this repo.
 
 ```shell
 
