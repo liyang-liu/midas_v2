@@ -1,5 +1,5 @@
-device_target: 'Ascend'                                                 #推理使用服务器的类型,有CPU,GPU,Ascend
-device_id: 7                                                            #推理使用的卡的编号
+device_target: 'GPU'                                                 #inference server type: CPU,GPU,Ascend
+device_id: 0                                                            #inference machine id
 
 
 #train
@@ -13,7 +13,8 @@ power: 0.5
 epoch_size: 400
 batch_size: 8
 lr_decay: False
-train_data_dir: '/midas/'
+train_data_dir: 'midas/'
+train_json_data_dir: '../data/mixdata.json'
 width_per_group: 8
 groups: 32
 in_channels: 64
@@ -29,8 +30,8 @@ ensure_multiple_of: 32
 resize_method: "upper_bound"
 
 #run&export
-input_path: '/input'
-output_path: '/output'
+input_path: '/midas/input'
+output_path: '/midas/output'
 model_weights: '/ckpt/Midas_0-600_56_1.ckpt'
 file_format: "MINDIR"  # ["AIR", "MINDIR"] 
 

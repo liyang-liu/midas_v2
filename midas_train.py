@@ -92,6 +92,7 @@ def train(mixdata_path):
                             save_graphs=False, device_id=device_id,
                             max_call_depth=10000)
     # load data
+    print(mixdata_path)
     f = open(mixdata_path)
     data_config = json.load(f)
     img_paths = data_config['img']

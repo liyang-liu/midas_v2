@@ -1,85 +1,134 @@
-# 目录
+# Contents
 
 <!-- TOC -->
 
-- [midas描述](#midas描述)
-- [模型架构](#模型架构)
-- [数据集](#数据集)
-- [特性](#特性)
-    - [混合精度](#混合精度)
-- [环境要求](#环境要求)
-- [快速入门](#快速入门)
-- [脚本说明](#脚本说明)
-    - [脚本及样例代码](#脚本及样例代码)
-    - [脚本参数](#脚本参数)
-    - [训练过程](#训练过程)
-    - [评估过程](#评估过程)
-- [推理过程](#推理过程)
-- [模型描述](#模型描述)
-    - [性能](#性能)
-        - [评估性能](#评估性能)
-- [随机情况说明](#随机情况说明)
-- [ModelZoo主页](#ModelZoo主页)
+- [Midas Description](#midasDescription)
+- [Model Structure](#Model Structure)
+- [Dataset](#Dataset)
+- [Features](#Features)
+    - [Mixed Precision](#Mixed Precision)
+- [System Requirements](#System Requirements)
+- [Quick Start](#Quick Start)
+- [Scripts](#Scripts)
+    - [Scripts and Example Code](#Scripts and Example Code)
+    - [Scripts Parameters](#Scripts Parameters)
+    - [Training Process](#Training Process)
+    - [Validation Prcoess](#Validation Process)
+- [Inference Process](#Inference Process)
+- [Model Description](#Model Description)
+    - [Features](#Features)
+        - [Feature Evaluation](#Feature Evaluation)
+- [Explanation on Stochastic Situation](#Explanation on Stochastic Situation)
+- [ModelZoo HomePage](#ModelZoo HomePage)
 
 <!-- /TOC -->
 
-# midas描述
+# midasDescription
 
-## 概述
+## Summary
 
-Midas全称为Towards Robust Monocular Depth Estimation:Mixing Datasets for Zero-shot Cross-dataset Transfer,用来估计图片的深度信息，使用了五个不同的训练数据集，五个训练数据集混合策略为多目标优化，其中包括作者自制的3D电影数据集，使用6个和训练集完全不同的测试集进行验证。本次只使用ReDWeb数据集进行训练。
+Midas is the codename for "Towards Robust Monocular Depth Estimation:Mixing Datasets for Zero-shot Cross-dataset Transfer",
+provides estimation of image depth，it uses 5 different datasets for training，
+these mixed-type strategy helps to achieve multi-objective optimization.
+One of the datasets is a self-made 3D movie dataset. And it uses 6 datasets totally different from training for validaiton.
+This repo only uses the RedWeb dataset for training.
+For detailed description of the model network, please refer to [Towards Robust Monocular Depth Estimation:Mixing Datasets for
+Zero-shot Cross-dataset Transfer](https://arxiv.org/pdf/1907.01341v3.pdf)，Midas模型网络的Pytorch版本实现，可参考(<https://github.com/intel-isl/MiDaS>)
 
-Midas模型网络具体细节可参考[Towards Robust Monocular Depth Estimation:Mixing Datasets for
-Zero-shot Cross-dataset Transfer](https://arxiv.org/pdf/1907.01341v3.pdf)，Midas模型网络的Pytorch版本实现，可参考(<https://github.com/intel-isl/MiDaS>)。
+Midas全称为 "" 用来估计图片的深度信息, 使用了五个不同的训练数据集，五个训练数据集混合策略为多目标优. 其中包括作者自制的3D电影数据集. 使用6个和训练集完全不同的测试集进行验证。
+本次只使用ReDWeb数据集进行训练。Midas模型网络具体细节可参考 。
 
-## 论文
+## Paper
 
-1. [论文:](https://arxiv.org/pdf/1907.01341v3.pdf) Ranftl*, Katrin Lasinger*, David Hafner, Konrad Schindler, and Vladlen Koltun.
+1. [Paper:](https://arxiv.org/pdf/1907.01341v3.pdf) Ranftl*, Katrin Lasinger*, David Hafner, Konrad Schindler, and Vladlen Koltun.
 
-# 模型架构
+# Model Structure
 
-Midas的总体网络架构如下：
-[链接](https://arxiv.org/pdf/1907.01341v3.pdf)
+Overall Model structure as described in：
+[Link](https://arxiv.org/pdf/1907.01341v3.pdf)
 
-# 数据集
+# Dataset
 
-使用的数据集：[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>)
+Dataset used：[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>)
 
-- 数据集大小：
-    - 训练集：292M, 3600个图像
-- 数据格式：
-    - 原图imgs：JPG
-    - 深度图RDs：PNG
+- Dataset size：
+    - training size：292M, 3600 images
+- Data format：
+    - original imgs：JPG
+    - Depth RDs：PNG
 
-# 特性
+# Features
 
-## 混合精度
+## Mixed Precision
 
-采用[混合精度](https://www.mindspore.cn/tutorials/experts/zh-CN/master/others/mixed_precision.html)的训练方法使用支持单精度和半精度数据来提高深度学习神经网络的训练速度，同时保持单精度训练所能达到的网络精度。混合精度训练提高计算速度、减少内存使用的同时，支持在特定硬件上训练更大的模型或实现更大批次的训练。
-以FP16算子为例，如果输入数据类型为FP32，MindSpore后台会自动降低精度来处理数据。用户可打开INFO日志，搜索“reduce precision”查看精度降低的算子。
+采用[混合精度](https://www.mindspore.cn/tutorials/experts/zh-CN/master/others/mixed_precision.html)的训练方法
+5使用支持单精度和半精度数据来提高深度学习神经网络的训练速度，同时保持单精度训练所能达到的网络精度。
+混合精度训练提高计算速度、减少内存使用的同时，支持在特定硬件上训练更大的模型
+或实现更大批次的训练。
+以FP16算子为例，如果输入数据类型为FP32，MindSpore后台会自动降低精度来处理数据。
+用户可打开INFO日志，搜索“reduce precision”查看精度降低的算子。
 
-# 环境要求
+Adopts [MixedPrecision_English](https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html) training method,
+by using Full Purity (FP32) and Half Purity (FP16) to significantly improve Deep Learning efficiency and memory usage,
+yet achieving sufficient accuracy. 
+This results in training of even larger models or larger batch size in dedicated hardware. 
+The user is recommended to checkout out the "INFO" diary, and search for "reduce precision" for calculations 
+that use reduced purity.
+ 
+# System Requirements 
 
-- 硬件(Ascend)
-    - 准备Ascend处理器搭建硬件环境.
-- 框架
+- Hardware(Ascend or GPU)
+    - Prepare Ascend Processing unit to setup hardware environment. 准备Ascend处理器搭建硬件环境.
+    - Or Prepare GPU environment
+      - Install CUDA 11.6.0, cudnn 8.4.1.50, TensorRT 8.4.2.4(optional), then set following
+      $ export PATH=/usr/local/cuda-11.6/bin:$PATH
+      $ export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64:$LD_LIBRARY_PATH
+      $ export CUDA_HOME=/usr/local/cuda-11.6
+      
+      - create conda environment to install python 3.9.11
+      $ conda create -n midas_v2 python=3.9.11 -y
+      $ conda activate midas_v2
+      $ pip install h5py
+      $ pip install pip install opencv-python==4.9.0.80
+      
+      - Install Mindspore: if cuda was configured correctly, should automatically download mindspore with GPU support)
+      $ pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
+      - Verify 
+      $ python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
+      
+      
+- Installation
     - [MindSpore](https://www.mindspore.cn/install/en)
-- 如需查看详情，请参见如下资源：
+- If detailed information is needed, please check following resources 如需查看详情，请参见如下资源：
     - [MindSpore教程](https://www.mindspore.cn/tutorials/zh-CN/master/index.html)
     - [MindSpore Python API](https://www.mindspore.cn/docs/zh-CN/master/index.html)
 
-# 快速入门
+# Quick Start
+After installing MindSpore from its official website, follow steps below for training and validation:
 
-通过官方网站安装MindSpore后，您可以按照如下步骤进行训练和评估：
+- Pretrain models 
 
-- 预训练模型
-
+  Before training starts, need to obtain mindspore ImageNet pre-train models, use pre-trained model from resnext101, 
+  model name [resnext101_32x8d_wsl](<https://download.pytorch.org/models/ig_resnext101_32x8-c38310e5.pth>),
+  after downloading the "pth" file, run `python src/utils/pth2ckpt.py /pth_path/ig_resnext101_32x8-c38310e5.pth`
+  to convert the pth file to "ckpt" file.
   当开始训练之前需要获取mindspore图像网络预训练模型，使用在resnext101上训练出来的预训练模型[resnext101_32x8d_wsl](<https://download.pytorch.org/models/ig_resnext101_32x8-c38310e5.pth>),下载完pth文件之后,运行`python src/utils/pth2ckpt.py /pth_path/ig_resnext101_32x8-c38310e5.pth`将pth文件转换为ckpt文件.
-- 数据集准备
 
-  midas网络模型使用ReDWeb数据集用于训练,使用Sintel,KITTI,TUM数据集进行推理,数据集可通过[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>),[Sintel](http://sintel.is.tue.mpg.de),[Kitti](http://www.cvlibs.net/datasets/kitti/raw_data.php),[TUM](https://vision.in.tum.de/data/datasets/rgbd-dataset/download#freiburg2_desk_with_person)官方网站下载使用.
-  Sintel数据集需要分别下载原图和深度图，放入到Sintel数据集文件夹中。TUM数据集根据处理函数得到associate.txt进行匹配数据。所有处理函数在preprocess文件夹下，具体可参考preprocess文件夹下的readme.md。
-- 下载完数据集之后,按如下目录格式存放数据集和代码并将`midas/mixdata.json`和数据集放到`data/`目录下即可:
+- Preparation of dataset 
+
+
+ The midas NN model uses ReDWeb Datasets for training, and uses Sintel, KITTI, TUM datasets for inference,
+  dataset can be downloaded from [ReDWeb](<https://www.paperswithcode.com/dataset/redweb>),[Sintel](http://sintel.is.tue.mpg.de),[Kitti](http://www.cvlibs.net/datasets/kitti/raw_data.php),[TUM](https://vision.in.tum.de/data/datasets/rgbd-dataset/download#freiburg2_desk_with_person).
+  Specifically, Sintel dataset requires downloading of both original images and depth images, they should be saved into the "Sintel" dataset folder。
+  For the TUM dataset: run the pre-processing function to generate associate.txt for data pairing。
+  All pre-processing functions can be found in the "preprocess" folder，
+  for details please checkout the "readme.md" document under the "preprocess" folder。
+ midas网络模型使用ReDWeb数据集用于训练,使用Sintel,KITTI,TUM数据集进行推理,数据集可通过[ReDWeb](<https://www.paperswithcode.com/dataset/redweb>),[Sintel](http://sintel.is.tue.mpg.de),[Kitti](http://www.cvlibs.net/datasets/kitti/raw_data.php),[TUM](https://vision.in.tum.de/data/datasets/rgbd-dataset/download#freiburg2_desk_with_person)官方网站下载使用.
+ Sintel数据集需要分别下载原图和深度图，放入到Sintel数据集文件夹中。TUM数据集根据处理函数得到associate.txt进行匹配数据。所有处理函数在preprocess文件夹下，具体可参考preprocess文件夹下的readme.md。
+  
+- After downloading datasets, save the dataset and code under the folder structure shown below, 
+  and save `midas/mixdata.json` and datasets under `data/`.
+  下载完数据集之后,按如下目录格式存放数据集和代码, 并将`midas/mixdata.json`和数据集放到`data/`目录下即可:
 
     ```path
         └── midas
@@ -118,22 +167,24 @@ Midas的总体网络架构如下：
             |   └─ occlusions
     ```
 
-- Ascend处理器环境运行
+- Usage under the "Ascend" Processing Unit Environment Ascend处理器环境运行
 
 ```text
-# 分布式训练
-用法：bash run_distribute_train.sh 8 ./ckpt/midas_resnext_101_WSL.ckpt
+# Distributed training
+Command: bash run_distribute_train.sh 8 ./ckpt/midas_resnext_101_WSL.ckpt
 
-# 单机训练
-用法：bash run_standalone_train.sh [DEVICE_ID] [CKPT_PATH]
 
-# 运行评估示例
-用法：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
+# Single Machine Unit training
+Command：bash run_standalone_train.sh [DEVICE_ID] [CKPT_PATH]
+
+# Running Evluation Example
+Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
 ```
 
-# 脚本说明
+# Scripts
 
-## 脚本及样例代码
+## Scripts and Example Code
+310 refers to a Ascend computing unit model [310](https://www.mindspore.cn/docs/programming_guide/en/r1.3/multi_platform_inference_ascend_310.html)
 
 ```shell
 
@@ -141,129 +192,129 @@ Midas的总体网络架构如下：
   ├── README.md
   ├── ascend310_infer
     ├── inc
-        └── utils.sh                       # 310头文件
+        └── utils.sh                       # 310 head script
     ├── src
-        ├── main.cc                        # 310主函数
-        └── utils.cc                       # 310函数
-    ├── build.sh                           # 编译310环境
-    └── CMakeLists.txt                     # 310推理环境
+        ├── main.cc                        # 310 main function
+        └── utils.cc                       # 310 function
+    ├── build.sh                           # build 310 envrionment
+    └── CMakeLists.txt                     # 310 make file
   ├── scripts
-    ├── run_distribute_train.sh            # 启动Ascend分布式训练（8卡）
-    ├── run_eval.sh                        # 启动Ascend评估
-    ├── run_standalone_train.sh            # 启动Ascend单机训练（单卡）
-    ├── run_train_gpu.sh                   # 启动GPU训练
-    └── run_infer_310.sh                   # 启动Ascend的310推理
+    ├── run_distribute_train.sh            # start Ascend distributed training（8 cards）
+    ├── run_eval.sh                        # start Ascend validation
+    ├── run_standalone_train.sh            # start Ascend single machine（stand alone）
+    ├── run_train_gpu.sh                   # start GPU training
+    └── run_infer_310.sh                   # start Ascend 310 inference
   ├── src
     ├── utils
-        ├── loadImgDepth.py                # 读取数据集
-        └── transforms.py                  # 图像处理转换
-    ├─config.py                            # 训练配置
-    ├── cunstom_op.py                      # 网络操作
-    ├── blocks_ms.py                       # 网络组件
-    ├── loss.py                            # 损失函数定义
-    ├── util.py                            # 读取图片工具
-    └── midas_net.py                       # 主干网络定义
-  ├── config.yaml                          # 训练参数配置文件
-  ├── midas_eval.py                        # 评估网络
-  ├── midas_export.py                      # 模型导出
-  ├── midas_run.py                         # 模型运行
-  ├── postprocess.py                       # 310后处理
-  └── midas_train.py                       # 训练网络
+        ├── loadImgDepth.py                # load dataset
+        └── transforms.py                  # convert images
+    ├─config.py                            # training configuration
+    ├── cunstom_op.py                      # NN operation
+    ├── blocks_ms.py                       # NN components
+    ├── loss.py                            # loss function
+    ├── util.py                            # image io tool 
+    └── midas_net.py                       # main net definition
+  ├── config.yaml                          # training parameters configuration
+  ├── midas_eval.py                        # NN evaluation
+  ├── midas_export.py                      # model export
+  ├── midas_run.py                         # model run
+  ├── postprocess.py                       # 310 pose-pcocessing
+  └── midas_train.py                       # train nn model
 ```
 
-## 脚本参数
+## Training Parameters
+Configure settings in file "config.yaml"
 
-在config.yaml中配置相关参数。
 
-- 配置训练相关参数：
+- Configure training parameters:
 
 ```python
-device_target: 'Ascend'                                          #服务器的类型,有CPU,GPU,Ascend
-device_id: 7                                                     #卡的编号
-run_distribute: False                                            #是否进行分布式并行训练
-is_modelarts: False                                              #是否在云上训练
+device_target: 'Ascend'                                          #processor type,accept type: CPU,GPU,Ascend
+device_id: 7                                                     #device ID
+run_distribute: False                                            #whether to use distributed training
+is_modelarts: False                                              #whether to rain in cloud
 no_backbone_params_lr: 0.00001                                   #1e-5
 no_backbone_params_end_lr: 0.00000001                            #1e-8
 backbone_params_lr: 0.0001                                       #1e-4
 backbone_params_end_lr: 0.0000001                                #1e-7
-power: 0.5                                                       #PolynomialDecayLR种控制lr参数
-epoch_size: 400                                                  #总epoch
+power: 0.5                                                       #PolynomialDecayLR seed control: lr parameter 种控制lr参数
+epoch_size: 400                                                  #total epoch
 batch_size: 8                                                    #batch_size
-lr_decay: False                                                   #是否采用动态学习率
-train_data_dir: '/midas/'                       #训练集根路径
-width_per_group: 8                                               #网络参数
+lr_decay: False                                                  #whether use dynamically adjusted learn rate 
+train_data_dir: '/midas/'                                        #dataset root path
+width_per_group: 8                                               #network parameter
 groups: 32
 in_channels: 64
 features: 256
 layers: [3, 4, 23, 3]
-img_width: 384                                                   #输入网络的图片宽度
-img_height: 384                                                  #输入网络的图片高度
-nm_img_mean: [0.485, 0.456, 0.406]                               #图片预处理正则化参数
+img_width: 384                                                   #NN input image width
+img_height: 384                                                  #NN input image height
+nm_img_mean: [0.485, 0.456, 0.406]                               #Image pre-processing regularization parameter
 nm_img_std: [0.229, 0.224, 0.225]
-resize_target: True                                              #如果为True,修改image, mask, target的尺寸，否则只修改image尺寸
-keep_aspect_ratio: False                                         #保持纵横比
-ensure_multiple_of: 32                                           #图片尺寸为32倍数
+keep_aspect_ratio: False                                         #keep aspect ratio
+resize_target: True                                              #if True, modify size of image, mask, target，otherwise only modify image size
+ensure_multiple_of: 32                                           #ensure image size is multiple of 32 
 resize_method: "upper_bound"                                     #resize模式
 ```
 
-- 配置验证相关参数：
+- Configure validation parameters: 
 
 ```python
-datapath_TUM: '/data/TUM'                                        #TUM数据集地址
-datapath_Sintel: '/data/sintel/sintel-data'                      #Sintel数据集地址
-datapath_ETH3D: '/data/ETH3D/ETH3D-data'                         #ETH3D数据集地址
-datapath_Kitti: '/data/Kitti_raw_data'                           #Kitti数据集地址
-datapath_DIW: '/data/DIW'                                        #DIW数据集地址
-datapath_NYU: ['/data/NYU/nyu.mat','/data/NYU/splits.mat']       #NYU数据集地址
-ann_file: 'val.json'                                             #存放推理结果的文件地址
-ckpt_path: '/midas/ckpt/Midas_0-600_56_1.ckpt'                   #存放推理使用的ckpt地址
-data_name: 'all'                                               #需要推理的数据集名称，有 Sintel,Kitti,TUM,DIW,ETH3D,all
+datapath_TUM: '/data/TUM'                                        #TUM dataset path
+datapath_Sintel: '/data/sintel/sintel-data'                      #Sintel dataset path
+datapath_ETH3D: '/data/ETH3D/ETH3D-data'                         #ETH3D dataset path
+datapath_Kitti: '/data/Kitti_raw_data'                           #Kitti dataset path
+datapath_DIW: '/data/DIW'                                        #DIW dataset path
+datapath_NYU: ['/data/NYU/nyu.mat','/data/NYU/splits.mat']       #NYU dataset path
+ann_file: 'val.json'                                             #path to save inference results
+ckpt_path: '/midas/ckpt/Midas_0-600_56_1.ckpt'                   #path to save inference ckpt file
+data_name: 'all'                                                 #dataset for inference, including Sintel,Kitti,TUM,DIW,ETH3D,all
 ```
 
-- 配置运行和导出模型相关参数：
+- Configure running and model export parameter
 
 ```python
-input_path: '/midas/input'                  #输入图片的路径
-output_path: '/midas/output'                #模型输出图片的路径
-model_weights: '/ckpt/Midas_0-600_56_1.ckpt'#模型参数路径
-file_format: "MINDIR"  # ["AIR", "MINDIR"]                          #AIR/MIDIR
+input_path: '/midas/input'                      #input image path
+output_path: '/midas/output'                    #model output path 模型输出图片的路径
+model_weights: '/ckpt/Midas_0-600_56_1.ckpt'    #model parameter path
+file_format: "MINDIR"  # ["AIR", "MINDIR"]      #AIR/MIDIR
 ```
 
-## 训练过程
+## Training Process
 
-### 用法
+### Usage
 
-#### Ascend处理器环境运行
-
-```text
-# 分布式训练
-用法：bash run_distribute_train.sh 8 ./ckpt/midas_resnext_101_WSL.ckpt
-# 单机训练
-用法：bash run_standalone_train.sh [DEVICE_ID] [CKPT_PATH]
-# 运行评估示例
-用法：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
-
-```
-
-#### GPU处理器环境运行
+#### For Ascend Envionrment (Ascend处理器环境运行)
 
 ```text
-用法：bash run_train_GPU.sh [DEVICE_NUM] [DEVICE_ID] [CKPT_PATH]
-# 分布式训练
-用法：bash run_train_GPU.sh 8 0,1,2,3,4,5,6,7 /ckpt/midas_resnext_101_WSL.ckpt
-# 单机训练
-用法：bash run_train_GPU.sh 1 0 /ckpt/midas_resnext_101_WSL.ckpt
-# 运行评估示例
-用法：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
+# Distributed Training
+Command：bash run_distribute_train.sh 8 ./ckpt/midas_resnext_101_WSL.ckpt
+# Single Machine Training
+Command：bash run_standalone_train.sh [DEVICE_ID] [CKPT_PATH]
+# Run Evaluation Example
+Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
 
 ```
 
-### 结果
-
-- 使用ReDWeb数据集训练midas
+#### For GPU Environment   (GPU处理器环境运行)
 
 ```text
-分布式训练结果（8P）
+Command：bash run_train_GPU.sh [DEVICE_NUM] [DEVICE_ID] [CKPT_PATH]
+# Distributed training
+Command：bash run_train_GPU.sh 8 0,1,2,3,4,5,6,7 /ckpt/midas_resnext_101_WSL.ckpt
+# Single machine training
+Command：bash run_train_GPU.sh 1 0 /ckpt/midas_resnext_101_WSL.ckpt
+# Running evaluation example
+Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
+
+```
+
+### Results
+
+- Train midas with ReDWeb datasets
+
+```text
+Distributed training results:（8P）
 epoch: 1 step: 56, loss is 579.5216
 epoch time: 1497998.993 ms, per step time: 26749.982 ms
 epoch: 2 step: 56, loss is 773.3644
@@ -286,96 +337,94 @@ epoch: 400 step: 56, loss is 8.2024975
 epoch time: 23696.833 ms, per step time: 423.158 ms
 ```
 
-## 评估过程
+## Validation Process
 
-### 用法
+### Usage
 
-#### Ascend处理器环境运行
-
-可通过改变config.yaml文件中的"data_name"进行对应的数据集推理，默认为全部数据集。
+#### Ascend processing environment (Ascend处理器环境运行)
+Specify inference dataset in file "config.yaml" for field "data_name". Default: all datasets 
 
 ```bash
-# 评估
+# Validation
 bash run_eval.sh [DEVICE_ID] [DATA_NAME]
 ```
 
-### 结果
+### Results
 
-打开val.json查看推理的结果,如下所示：
+Open file "val.json" to check inference results, example below：
 
 ```text
 {"Kitti": 24.222 "Sintel":0.323 "TUM":15.08 }
 ```
 
-#### GPU处理器环境运行
+#### GPU Environment 
 
 ```bash
-# 评估
+# Validaton
 bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH] [DEVICE_TARGET]
 ```
 
-### 结果
+### Results
 
-打开val.json查看推理的结果,如下所示：
+Open file "val.json" to check inference results, as shown below ：
 
 ```text
 {"Kitti": 24.222 "Sintel":0.323 "TUM":15.08 }
 ```
 
-# 推理过程
+# Inference Process
 
-## 导出MindIR
+## Export MindIR
 
 ```shell
 python midas_export.py
 ```
 
-参数在config.yaml文件中设置
+Configure settings in file "config.yam" 
 
-### 在Ascend310执行推理
-
-在执行推理前，mindir文件必须通过`midas_export.py`脚本导出。以下展示了使用mindir模型执行推理的示例。
+### Perform Inference on Ascend 310 (在Ascend310执行推理)
+Before running inference, you must generate the "mindir" file by running `midas_export.py`. 
+The demo below illustrates how to perform inference using the `mindir` model. 
 
 ```shell
 # Ascend310 inference
 bash run_infer_310.sh [MODEL_PATH] [DATA_PATH] [DATASET_NAME] [DEVICE_ID]
 ```
 
-- `MODEL_PATH` mindir文件路径
-- `DATA_PATH` 推理数据集路径
-- `DATASET_NAME` 推理数据集名称，名称分别为Kitti，TUM，Sintel。
-- `DEVICE_ID` 可选，默认值为0。
+- `MODEL_PATH` mindir file path
+- `DATA_PATH`  inference dataset path 
+- `DATASET_NAME` inference dataset name，should be Kitti，TUM，Sintel。
+- `DEVICE_ID`   optional，default value is 0。
 
-### 结果
-
-推理结果保存在脚本执行的当前路径，你可以在result_val.json中看到以下精度计算结果。
+### Results
+Inference results are stored in the working path of the script, you can checkout precision calculation results under file `result_val.json`.
 
 ```text
 {"Kitti": 18.27 "Sintel":0.314 "TUM":13.27 }
 ```
 
-# 模型描述
+# Model Description
 
-## 性能
+## Features
 
-### 评估性能
+### Feature Evaluation
 
-#### ReDWeb上性能参数
+#### Feature from ReDWeb (ReDWeb性能参数)
 
-| Parameters          | Ascend 910                   |V100-PCIE                   |
-| ------------------- | --------------------------- |--------------------------- |
-| 模型版本       | Midas               | Midas               |
-| 资源            | Ascend 910；CPU：2.60GHz，192核；内存：755G                  | Tesla V100-PCIE 32G ， cpu  52cores 2.60GHz，RAM 754G                 |
-| 上传日期       | 2021-06-24 |2021-11-30|
-| MindSpore版本   | 1.2.0                       |1.6.0.20211125|
-| 数据集             | ReDWeb                  |ReDWeb                  |
-| 预训练模型            | ResNeXt_101_WSL                  |ResNeXt_101_WSL                  |
-| 训练参数 | epoch=400, batch_size=8, no_backbone_lr=1e-4,backbone_lr=1e-5   | epoch=400, batch_size=8, no_backbone_lr=1e-4,backbone_lr=1e-5   |
-| 优化器           | Adam                        |Adam                        |
-| 损失函数       | 自定义损失函数          | 自定义损失函数          |
-| 速度               | 8pc: 423.4 ms/step        |8pc: 920 ms/step  1pc:655ms/step      |
-| 训练性能   | "Kitti": 24.222 "Sintel":0.323  "TUM":15.08    |"Kitti"：23.870 "sintel": 0.322569 "TUM": 16.198  |
+| Parameters          | Ascend 910                   |V100-PCIE                  |
+| ------------------- | ---------------------------- |--------------------------- |
+| Model version       | Midas                        | Midas                      |
+| resources           | Ascend 910；CPU：2.60GHz，192 core；memeory：755G                  | Tesla V100-PCIE 32G ， cpu  52cores 2.60GHz，RAM 754G                 |
+| upload time         | 2021-06-24                   |2021-11-30                  |
+| MindSpore version   | 1.2.0                        |1.6.0.20211125              |
+| Dataset             | ReDWeb                       |ReDWeb                      |
+| Pre-trained model   | ResNeXt_101_WSL              |ResNeXt_101_WSL             |
+| Training parameters | epoch=400, batch_size=8, no_backbone_lr=1e-4,backbone_lr=1e-5   | epoch=400, batch_size=8, no_backbone_lr=1e-4,backbone_lr=1e-5   |
+| Optimizer           | Adam                         |Adam                        |
+| Loss function       | Self-defined loss function   | 自定义损失函数               |
+| Speed               | 8pc: 423.4 ms/step           |8pc: 920 ms/step  1pc:655ms/step      |
+| Train metric        | "Kitti": 24.222 "Sintel":0.323  "TUM":15.08    |"Kitti"：23.870 "sintel": 0.322569 "TUM": 16.198  |
 
-# ModelZoo主页
+# ModelZoo HomePage
 
- 请浏览官网[主页](https://gitee.com/mindspore/models)。
+ Please checkout their official homepage[homepage](https://gitee.com/mindspore/models)。
