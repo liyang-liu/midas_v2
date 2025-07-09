@@ -100,6 +100,8 @@ that use reduced purity.
     - Install Mindspore: if cuda was configured correctly, should automatically download mindspore with GPU support)
       ```shell
       pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+      /home/liyang/anaconda3/envs/midas-v2/lib/python3.9/site-packages/mindspore
       ```
       
     - Verify by running following command
