@@ -107,10 +107,11 @@ that use reduced purity.
       python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
       ```
       You should see following outputs
-      ```text
+      
+```text
 	MindSpore version: __version__
 	The result of multiplication calculation is correct, MindSpore has been installed on platform [GPU] successfully!      
-      ```
+```
       
     - For details, see [MindSpore](https://www.mindspore.cn/install/en)
     
@@ -326,7 +327,7 @@ Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
 ```
 Or
 
-```text
+```shell
 cd midas
 mv mida_pth.ckpt ckpt
 bash -x scripts/run_train_gpu.sh 1 0 ckpt/midas_pth.ckpt
