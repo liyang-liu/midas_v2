@@ -81,32 +81,33 @@ that use reduced purity.
 - Hardware(GPU)
     - Prepare GPU environment
       - Install CUDA 11.6.0, cudnn 8.4.1.50, TensorRT 8.4.2.4(optional), then set following
-      ```text
-      $ export PATH=/usr/local/cuda-11.6/bin:$PATH
-      $ export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64:$LD_LIBRARY_PATH
-      $ export CUDA_HOME=/usr/local/cuda-11.6
+      ```shell
+      export PATH=/usr/local/cuda-11.6/bin:$PATH
+      export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64:$LD_LIBRARY_PATH
+      export CUDA_HOME=/usr/local/cuda-11.6
       ```
       
       - create conda environment to install python 3.9.11
-      ```text
-      $ conda create -n midas_v2 python=3.9.11 -y
-      $ conda activate midas_v2
-      $ pip install h5py
-      $ pip install pip install opencv-python==4.9.0.80
+      ```shell
+      conda create -n midas_v2 python=3.9.11 -y
+      conda activate midas_v2
+      pip install h5py
+      pip install pip install opencv-python==4.9.0.80
       ```      
       
       
 - Installation
     - Install Mindspore: if cuda was configured correctly, should automatically download mindspore with GPU support)
-      ```text
-      $ pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
+      ```shell
+      pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
       ```
       
     - Verify by running following command
-      ```text    
-      $ python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
+      ```shell    
+      python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
       ```
-      ```shell
+      You should see following outputs
+      ```text
 	MindSpore version: __version__
 	The result of multiplication calculation is correct, MindSpore has been installed on platform [GPU] successfully!      
       ```
