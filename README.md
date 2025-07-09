@@ -81,24 +81,36 @@ that use reduced purity.
 - Hardware(GPU)
     - Prepare GPU environment
       - Install CUDA 11.6.0, cudnn 8.4.1.50, TensorRT 8.4.2.4(optional), then set following
+      ```text
       $ export PATH=/usr/local/cuda-11.6/bin:$PATH
       $ export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64:$LD_LIBRARY_PATH
       $ export CUDA_HOME=/usr/local/cuda-11.6
+      ```
       
       - create conda environment to install python 3.9.11
+      ```text
       $ conda create -n midas_v2 python=3.9.11 -y
       $ conda activate midas_v2
       $ pip install h5py
       $ pip install pip install opencv-python==4.9.0.80
-      
+      ```      
       
       
 - Installation
     - Install Mindspore: if cuda was configured correctly, should automatically download mindspore with GPU support)
+      ```text
       $ pip install mindspore-dev -i https://pypi.tuna.tsinghua.edu.cn/simple
-    - Verify 
+      ```
+      
+    - Verify by running following command
+      ```text    
       $ python -c "import mindspore;mindspore.set_device(device_target='GPU');mindspore.run_check()"
-	
+      ```
+      ```shell
+	MindSpore version: __version__
+	The result of multiplication calculation is correct, MindSpore has been installed on platform [GPU] successfully!      
+      ```
+      
     - For details, see [MindSpore](https://www.mindspore.cn/install/en)
     
 - If detailed information is needed, please check following resources 如需查看详情，请参见如下资源：
@@ -187,7 +199,7 @@ Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
 # Scripts
 
 ## Scripts and Example Code
-310 refers to a Ascent computing unit processor developed from Huawei [310](https://www.mindspore.cn/docs/programming_guide/en/r1.3/multi_platform_inference_ascend_310.html), we will NOT use it in this repo.
+310 refers to a Ascend computing unit processor developed from Huawei [310](https://www.mindspore.cn/docs/programming_guide/en/r1.3/multi_platform_inference_ascend_310.html), we will NOT use it in this repo.
 
 ```shell
 
@@ -311,7 +323,16 @@ Command：bash run_train_GPU.sh 1 0 /ckpt/midas_resnext_101_WSL.ckpt
 Command：bash run_eval.sh [DEVICE_ID] [DATA_NAME] [CKPT_PATH]
 
 ```
+Or
 
+```text
+cd midas
+mv mida_pth.ckpt ckpt
+bash -x scripts/run_train_gpu.sh 1 0 ckpt/midas_pth.ckpt
+# This creates a folder train_GPU in midas, and produces some error messages in train_GPUS/train.log
+# Try re-run the command to see detailed error message
+python3 /home/liyang/Work/Research/Depth-for-Anything/Midas/midas/scripts/../midas_train.py --device_target GPU --run_distribute False --device_id 0 --model_weights ckpt/midas_pth.ckpt
+```
 ### Results
 
 - Train midas with ReDWeb datasets
